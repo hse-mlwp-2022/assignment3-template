@@ -4,8 +4,17 @@ from pandas_exercise import columns, carrier_names, freight_total, mail_total, p
 
 score = 0.0
 
+def is_iterable(object):
+    try:
+        z = iter(object)
+    except TypeError:
+        return False
+    return True
+
+
 def test_task2():
     global score
+    assert is_iterable(columns) == True, "Variable 'columns' should be iterable"
     assert list(columns) == ['passengers', 'freight', 'mail', 'distance', 'unique_carrier',
        'airline_id', 'unique_carrier_name', 'unique_carrier_entity', 'region',
        'carrier', 'carrier_name', 'carrier_group', 'carrier_group_new',
