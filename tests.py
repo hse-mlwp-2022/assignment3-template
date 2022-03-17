@@ -16,7 +16,7 @@ def is_iterable(object):
     return True
 
 
-def test_task2():
+def test_exercise2():
     global score
     assert is_iterable(columns) == True, "Variable 'columns' should be iterable"
     assert list(columns) == ['passengers', 'freight', 'mail', 'distance', 'unique_carrier',
@@ -33,14 +33,14 @@ def test_task2():
     score += 0.5
 
 
-def test_task3():
+def test_exercise3():
     global score
     assert isinstance(carrier_names, int) == True, "Variable 'carrier_names' should be integer"
     assert carrier_names == 318, "Task 3: number of distinct carriers is wrong!"
     score += 0.5
 
 
-def test_task4():
+def test_exercise4():
     global score
     # assert isinstance(carrier_names, int) == True, "Variable 'carrier_names' should be integer"
     assert freight_total == 903296879.0, "Task 4: freight total is wrong!"
@@ -53,7 +53,8 @@ def test_task4():
 def cleanup(request):
     def print_score():
         global score
-        # task 5
+        # exercise 5
+        print("")
         if is_iterable(top_10_by_passengers):
             carriers = ['American Airlines Inc.', 'United Air Lines Inc.', 'Delta Air Lines Inc.', 'JetBlue Airways', 'British Airways Plc', 'Lufthansa German Airlines', 'Westjet', 'Air Canada', 'Southwest Airlines Co.', 'Virgin Atlantic Airways']
             if Counter(top_10_by_passengers) == Counter(carriers):
@@ -65,7 +66,9 @@ def cleanup(request):
                 missing = [x for x in carriers if x not in list(top_10_by_passengers)]
                 print(f"The following carriers are wrong: {extra if extra else None}")
                 print(f"The following carriers are missing: {missing if missing else None}")
-        # task 6
+        else:
+            print("Solution for exercise 5 not found. Is 'top_10_by_passengers' an iterable?")
+        # exercise 6
         if isinstance(top_route_origin_city, str) and isinstance(top_route_dest_city, str) and isinstance(top_route_passengers_count, (int, float)):
             cities = ['Chicago, IL', 'New York, NY']
             passengers_count = 4131579
@@ -78,7 +81,9 @@ def cleanup(request):
                     print("Wrong origin and/or destination")
                 if top_route_passengers_count != passengers_count:
                     print("Wrong value of 'top_route_passengers_count'")
-        # task 7:
+        else:
+            print("Solution for exercise 6 not found. Are 'top_route_origin_city' and 'top_route_dest_city' strings? Is 'top_route_passengers_count' a number?")
+        # exercise 7:
         if isinstance(top_3_carriers_df, pd.DataFrame) or isinstance(top_3_carriers_df, pd.Series):
             correct_carrier_names = ['American Airlines Inc.', 'United Air Lines Inc.', 'Delta Air Lines Inc.']
             correct_percentage_of_passengers = [13, 23, 31]
@@ -99,7 +104,9 @@ def cleanup(request):
                     print(f"Wrong list of airline carriers. The following carriers are wrong: {extra}. Number of missing carriers: {len(missing)}")
                 if not all([abs(x[0]-x[1])<0.5 for x in zip(percentage_of_passengers, correct_percentage_of_passengers)]):
                     print(f"Some passenger percentage values are wrong: {percentage_of_passengers}")
-        # task 8:
+        else:
+            print("Solution for exercise 7 not found. Is 'top_3_carriers_df' a pandas.DataFrame or a pandas.Series object?")
+        # exercise 8:
         if isinstance(international_travel_per_country, pd.DataFrame) or isinstance(international_travel_per_country, pd.Series):
             correct_countries = ['Canada', 'Mexico', 'United Kingdom', 'Germany', 'Japan']
             correct_international_travel = [4, 5, 9, 13, 13]
@@ -120,5 +127,7 @@ def cleanup(request):
                     print(f"The following countries are wrong: {extra}. Number of missing countries: {len(missing)}")
                 if not all([abs(x[0]-x[1])<0.5 for x in zip(international_travel, correct_international_travel)]):
                     print(f"Some international travel per country percentage values are wrong: {international_travel}")
+        else:
+            print("Solution for exercise 8 not found. Is 'international_travel_per_country' a pandas.DataFrame or a pandas.Series object?")
         print(f"\nScore is {score}")
     request.addfinalizer(print_score)
