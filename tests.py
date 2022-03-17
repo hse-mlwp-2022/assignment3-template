@@ -2,6 +2,9 @@ import pytest
 
 from pandas_exercise import columns, carrier_names, freight_total, mail_total, passengers_total, top_10_by_passengers, top_route_origin_city, top_route_dest_city, top_route_passengers_count, top_3_carriers_df, international_travel_per_country
 
+import pandas as pd
+from collections import Counter
+
 score = 0.0
 
 
@@ -50,8 +53,51 @@ def test_task4():
 def cleanup(request):
     def print_score():
         global score
+        # task 5
         if is_iterable(top_10_by_passengers):
-            print(True)
-            # score += 1.5
+            carriers = ['American Airlines Inc.', 'United Air Lines Inc.', 'Delta Air Lines Inc.', 'JetBlue Airways', 'British Airways Plc', 'Lufthansa German Airlines', 'Westjet', 'Air Canada', 'Southwest Airlines Co.', 'Virgin Atlantic Airways']
+            if Counter(top_10_by_passengers) == Counter(carriers):
+                score += 1.5
+                print("Task 5 is correct!")
+            else:
+                print("Task 5 is wrong!")
+                extra = [x for x in list(top_10_by_passengers) if x not in carriers]
+                missing = [x for x in carriers if x not in list(top_10_by_passengers)]
+                print(f"The following carriers are wrong: {extra if extra else None}")
+                print(f"The following carriers are missing: {missing if missing else None}")
+        # task 6
+        if isinstance(top_route_origin_city, str) and isinstance(top_route_dest_city, str) and isinstance(top_route_passengers_count, (int, float)):
+            cities = ['Chicago, IL', 'New York, NY']
+            passengers_count = 4131579
+            if top_route_origin_city in cities and top_route_dest_city in cities and top_route_origin_city != top_route_dest_city and top_route_passengers_count == passengers_count:
+                score += 1.5
+                print("Task 6 is correct!")
+            else:
+                print("Task 6 is wrong!")
+                if top_route_origin_city not in cities or top_route_dest_city not in cities or top_route_origin_city == top_route_dest_city:
+                    print("Wrong origin and/or destination")
+                if top_route_passengers_count != passengers_count:
+                    print("Wrong value of 'top_route_passengers_count'")
+        # task 7:
+        if isinstance(top_3_carriers_df, pd.DataFrame) or isinstance(top_3_carriers_df, pd.Series):
+            correct_carrier_names = ['American Airlines Inc.', 'United Air Lines Inc.', 'Delta Air Lines Inc.']
+            correct_percentage_of_passengers = [13, 23, 31]
+            if len(top_3_carriers_df.shape) == 1: # either a pd.Series or a single column pd.DataFrame
+                carrier_names = top_3_carriers_df.index
+                percentage_of_passengers = sorted(list(top_3_carriers_df))
+            else:
+                carrier_names = top_3_carriers_df.iloc[:,0]
+                percentage_of_passengers = sorted(list(top_3_carriers_df[:,1]))
+            if Counter(carrier_names) == Counter(correct_carrier_names) and abs(percentage_of_passengers[0] - correct_percentage_of_passengers[0]) < 0.5 and abs(percentage_of_passengers[1] - 23) < 0.5 and abs(percentage_of_passengers[2] - 31) < 0.5:
+                score += 2
+                print("Task 7 is correct!")
+            else:
+                print("Task 7 is wrong!")
+                if Counter(carrier_names) == Counter(correct_carrier_names):
+                    extra = list(Counter(carrier_names) - Counter(correct_carrier_names))
+                    missing = list(Counter(correct_carrier_names) - Counter(carrier_names))
+                    print(f"Wrong list of airline carriers. The following carriers are wrong: {extra}. Number of missing carriers: {len(missing)}")
+                if not all([abs(x[0]-x[1])<0.5 for x in zip(percentage_of_passengers, correct_percentage_of_passengers)]):
+                    print(f"Wrong passenger percentage values: {percentage_of_passengers}")
         print(f"\nScore is {score}")
     request.addfinalizer(print_score)
