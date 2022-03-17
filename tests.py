@@ -93,11 +93,14 @@ def cleanup(request):
                 print("Task 7 is correct!")
             else:
                 print("Task 7 is wrong!")
-                if Counter(carrier_names) == Counter(correct_carrier_names):
+                if Counter(carrier_names) != Counter(correct_carrier_names):
                     extra = list(Counter(carrier_names) - Counter(correct_carrier_names))
                     missing = list(Counter(correct_carrier_names) - Counter(carrier_names))
                     print(f"Wrong list of airline carriers. The following carriers are wrong: {extra}. Number of missing carriers: {len(missing)}")
                 if not all([abs(x[0]-x[1])<0.5 for x in zip(percentage_of_passengers, correct_percentage_of_passengers)]):
                     print(f"Wrong passenger percentage values: {percentage_of_passengers}")
+        # task 8:
+        # if isinstance(international_travel_per_country, pd.DataFrame) or isinstance(international_travel_per_country, pd.Series):
+            
         print(f"\nScore is {score}")
     request.addfinalizer(print_score)
