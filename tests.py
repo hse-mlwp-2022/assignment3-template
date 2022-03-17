@@ -98,9 +98,27 @@ def cleanup(request):
                     missing = list(Counter(correct_carrier_names) - Counter(carrier_names))
                     print(f"Wrong list of airline carriers. The following carriers are wrong: {extra}. Number of missing carriers: {len(missing)}")
                 if not all([abs(x[0]-x[1])<0.5 for x in zip(percentage_of_passengers, correct_percentage_of_passengers)]):
-                    print(f"Wrong passenger percentage values: {percentage_of_passengers}")
+                    print(f"Some passenger percentage values are wrong: {percentage_of_passengers}")
         # task 8:
-        # if isinstance(international_travel_per_country, pd.DataFrame) or isinstance(international_travel_per_country, pd.Series):
-            
+        if isinstance(international_travel_per_country, pd.DataFrame) or isinstance(international_travel_per_country, pd.Series):
+            correct_countries = ['Canada', 'Mexico', 'United Kingdom', 'Germany', 'Japan']
+            correct_international_travel = [4, 5, 9, 13, 13]
+            if len(international_travel_per_country.shape) == 1: # either a pd.Series or a single column pd.DataFrame
+                countries = international_travel_per_country.index
+                international_travel = sorted(list(international_travel_per_country))
+            else:
+                countries = international_travel_per_country.iloc[:,0]
+                international_travel = sorted(list(international_travel_per_country.iloc[:,1]))
+            if Counter(countries) == Counter(correct_countries) and all([abs(x[0]-x[1]) < 0.5 for x in zip(correct_international_travel, international_travel)]):
+                score += 3
+                print("Task 8 is correct!")
+            else:
+                print("Task 8 is wrong!")
+                if Counter(countries) != Counter(correct_countries):
+                    extra = list(Counter(countries) - Counter(correct_countries))
+                    missing = list(Counter(correct_countries) - Counter(countries))
+                    print(f"The following countries are wrong: {extra}. Number of missing countries: {len(missing)}")
+                if not all([abs(x[0]-x[1])<0.5 for x in zip(international_travel, correct_international_travel)]):
+                    print(f"Some international travel per country percentage values are wrong: {international_travel}")
         print(f"\nScore is {score}")
     request.addfinalizer(print_score)
