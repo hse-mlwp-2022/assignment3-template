@@ -155,6 +155,7 @@ def cleanup(request):
                     print("Task 8 is correct!")
                 else:
                     print("Task 8 is wrong!")
+                    print("Please, note that only top 5 countries by passenger traffic are checked")
                     if Counter(countries) != Counter(correct_countries):
                         extra = list(Counter(countries) - Counter(correct_countries))
                         missing = list(Counter(correct_countries) - Counter(countries))
