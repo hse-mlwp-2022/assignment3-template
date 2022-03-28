@@ -114,7 +114,7 @@ def cleanup(request):
                     percentage_of_passengers = sorted(top_3_carriers_df.iloc[:,0].tolist())
                 else: # assume a two column pd.DataFrame
                     carrier_names = top_3_carriers_df.iloc[:,0]
-                    percentage_of_passengers = sorted(list(top_3_carriers_df[:,1]))
+                    percentage_of_passengers = sorted(list(top_3_carriers_df.iloc[:,1]))
                 if Counter(carrier_names) == Counter(correct_carrier_names) and abs(percentage_of_passengers[0] - correct_percentage_of_passengers[0]) < 0.5 and abs(percentage_of_passengers[1] - 23) < 0.5 and abs(percentage_of_passengers[2] - 31) < 0.5:
                     score += 2
                     print("Task 7 is correct!")
