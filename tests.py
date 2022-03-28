@@ -87,10 +87,13 @@ def cleanup(request):
         if isinstance(top_3_carriers_df, pd.DataFrame) or isinstance(top_3_carriers_df, pd.Series):
             correct_carrier_names = ['American Airlines Inc.', 'United Air Lines Inc.', 'Delta Air Lines Inc.']
             correct_percentage_of_passengers = [13, 23, 31]
-            if len(top_3_carriers_df.shape) == 1: # either a pd.Series or a single column pd.DataFrame
+            if len(top_3_carriers_df.shape) == 1: # assume a pd.Series
                 carrier_names = top_3_carriers_df.index
-                percentage_of_passengers = sorted(list(top_3_carriers_df))
-            else:
+                percentage_of_passengers = sorted(top_3_carriers_df.tolist())
+            elif 1 in top_3_carriers_df.shape: # assume a single column pd.DataFrame
+                carrier_names = top_3_carriers_df.index
+                percentage_of_passengers = sorted(top_3_carriers_df.iloc[:,0].tolist())
+            else: # assume a two column pd.DataFrame
                 carrier_names = top_3_carriers_df.iloc[:,0]
                 percentage_of_passengers = sorted(list(top_3_carriers_df[:,1]))
             if Counter(carrier_names) == Counter(correct_carrier_names) and abs(percentage_of_passengers[0] - correct_percentage_of_passengers[0]) < 0.5 and abs(percentage_of_passengers[1] - 23) < 0.5 and abs(percentage_of_passengers[2] - 31) < 0.5:
@@ -110,10 +113,13 @@ def cleanup(request):
         if isinstance(international_travel_per_country, pd.DataFrame) or isinstance(international_travel_per_country, pd.Series):
             correct_countries = ['Canada', 'Mexico', 'United Kingdom', 'Germany', 'Japan']
             correct_international_travel = [4, 5, 9, 13, 13]
-            if len(international_travel_per_country.shape) == 1: # either a pd.Series or a single column pd.DataFrame
+            if len(international_travel_per_country.shape) == 1: # assume a pd.Series
                 countries = international_travel_per_country.index
-                international_travel = sorted(list(international_travel_per_country))
-            else:
+                international_travel = sorted(international_travel_per_country.tolist())
+            elif 1 in international_travel_per_country.shape: # assume a single column pd.DataFrame
+                countries = international_travel_per_country.index
+                international_travel = sorted(international_travel_per_country.iloc[:,0].tolist())
+            else: # assume a two column pd.DataFrame
                 countries = international_travel_per_country.iloc[:,0]
                 international_travel = sorted(list(international_travel_per_country.iloc[:,1]))
             if Counter(countries) == Counter(correct_countries) and all([abs(x[0]-x[1]) < 0.5 for x in zip(correct_international_travel, international_travel)]):
