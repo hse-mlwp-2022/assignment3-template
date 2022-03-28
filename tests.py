@@ -58,10 +58,10 @@ def test_exercise4():
 def cleanup(request):
     def print_score():
         global score
+        print("")
+        # exercise 5
         try:
-            from pandas_exercise import top_10_by_passengers, top_route_origin_city, top_route_dest_city, top_route_passengers_count, top_3_carriers_df, international_travel_per_country
-            # exercise 5
-            print("")
+            from pandas_exercise import top_10_by_passengers
             if is_iterable(top_10_by_passengers):
                 carriers = ['American Airlines Inc.', 'United Air Lines Inc.', 'Delta Air Lines Inc.', 'JetBlue Airways', 'British Airways Plc', 'Lufthansa German Airlines', 'Westjet', 'Air Canada', 'Southwest Airlines Co.', 'Virgin Atlantic Airways']
                 if Counter(top_10_by_passengers) == Counter(carriers):
@@ -75,7 +75,13 @@ def cleanup(request):
                     print(f"The following carriers are missing: {missing if missing else None}")
             else:
                 print("Solution for exercise 5 not found. Is 'top_10_by_passengers' an iterable?")
-            # exercise 6
+        except Exception as e:
+            print("Exercise 5 failed!")
+            print(e)
+            print(traceback.format_exc())
+        # exercise 6
+        try:
+            from pandas_exercise import top_route_origin_city, top_route_dest_city, top_route_passengers_count
             if isinstance(top_route_origin_city, str) and isinstance(top_route_dest_city, str) and isinstance(top_route_passengers_count, (int, float)):
                 cities = ['Chicago, IL', 'New York, NY']
                 passengers_count = 4131579
@@ -90,7 +96,13 @@ def cleanup(request):
                         print("Wrong value of 'top_route_passengers_count'")
             else:
                 print("Solution for exercise 6 not found. Are 'top_route_origin_city' and 'top_route_dest_city' strings? Is 'top_route_passengers_count' a number?")
-            # exercise 7:
+        except Exception as e:
+            print("Exercise 6 failed!")
+            print(e)
+            print(traceback.format_exc())
+        # exercise 7:
+        try:
+            from pandas_exercise import top_3_carriers_df
             if isinstance(top_3_carriers_df, pd.DataFrame) or isinstance(top_3_carriers_df, pd.Series):
                 correct_carrier_names = ['American Airlines Inc.', 'United Air Lines Inc.', 'Delta Air Lines Inc.']
                 correct_percentage_of_passengers = [13, 23, 31]
@@ -116,7 +128,13 @@ def cleanup(request):
                         print(f"Some passenger percentage values are wrong: {percentage_of_passengers}")
             else:
                 print("Solution for exercise 7 not found. Is 'top_3_carriers_df' a pandas.DataFrame or a pandas.Series object?")
-            # exercise 8:
+        except Exception as e:
+            print("Exercise 7 failed!")
+            print(e)
+            print(traceback.format_exc())
+        # exercise 8:
+        try:
+            from pandas_exercise import international_travel_per_country
             if isinstance(international_travel_per_country, pd.DataFrame) or isinstance(international_travel_per_country, pd.Series):
                 correct_countries = ['Canada', 'Mexico', 'United Kingdom', 'Germany', 'Japan']
                 correct_international_travel = [4, 5, 9, 13, 13]
@@ -146,6 +164,7 @@ def cleanup(request):
             else:
                 print("Solution for exercise 8 not found. Is 'international_travel_per_country' a pandas.DataFrame or a pandas.Series object?")
         except Exception as e:
+            print("Exercise 8 failed!")
             print(e)
             print(traceback.format_exc())
         print(f"\nScore is {score}")
