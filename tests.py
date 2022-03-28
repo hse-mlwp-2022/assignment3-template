@@ -121,12 +121,15 @@ def cleanup(request):
                 correct_countries = ['Canada', 'Mexico', 'United Kingdom', 'Germany', 'Japan']
                 correct_international_travel = [4, 5, 9, 13, 13]
                 if len(international_travel_per_country.shape) == 1: # assume a pd.Series
+                    international_travel_per_country = international_travel_per_country.nlargest(5)
                     countries = international_travel_per_country.index
                     international_travel = sorted(international_travel_per_country.tolist())
                 elif 1 in international_travel_per_country.shape: # assume a single column pd.DataFrame
+                    international_travel_per_country = international_travel_per_country.nlargest(5, international_travel_per_country.columns[0])
                     countries = international_travel_per_country.index
                     international_travel = sorted(international_travel_per_country.iloc[:,0].tolist())
                 else: # assume a two column pd.DataFrame
+                    international_travel_per_country = international_travel_per_country.nlargest(5, international_travel_per_country.columns[1])
                     countries = international_travel_per_country.iloc[:,0]
                     international_travel = sorted(list(international_travel_per_country.iloc[:,1]))
                 if Counter(countries) == Counter(correct_countries) and all([abs(x[0]-x[1]) < 0.5 for x in zip(correct_international_travel, international_travel)]):
